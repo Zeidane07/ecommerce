@@ -1,0 +1,110 @@
+entity Product {
+  productID Long,
+  name String,
+  description String,
+  price Double,
+  stockQuantity Integer,
+}
+
+entity Category {
+  name String,
+  description String
+}
+entity SubCategory {
+  name String,
+  description String
+}
+
+
+
+entity Brand {
+  name String,
+   description String
+   
+}
+
+
+
+entity Coupon {
+  code String,
+  discountPercentage Double,
+  expiryDate Instant,
+  isActive Boolean
+  description String
+}
+
+entity ProductImage {
+  imageURL ImageBlob,
+  description String
+}
+
+entity Order {
+  orderDate Instant,
+  totalAmount Double,
+  description String
+}
+
+entity OrderItem {
+  orderItemID Long,
+  quantity Integer,
+  subtotal Double,
+  discountPercentage Double,
+  description String
+}
+
+entity Discount {
+  code String,
+  percentage Double,
+  expiryDate Instant,
+  description String
+}
+
+entity Invoice {
+  invoiceID Long,
+  totalAmount Double,
+  type Type,
+  status Boolean,
+  description String,
+}
+enum Type { CASH, BANKILY}
+
+
+
+entity Delivery {
+  deliveryDate Instant,
+  status String,
+  description String
+}
+
+// Set relationships
+relationship ManyToOne {
+  SubCategory{category} to Category,
+  Product{subCategory} to SubCategory,
+  Product{brand} to Brand,
+  
+  Order{user} to User,
+  Order{coupon} to Coupon,
+  OrderItem{Order} to Order,
+  OrderItem{Product} to Product,
+  Invoice{Order} to Order,
+  Delivery{Order} to Order,
+  ProductImage{Product} to Product
+}
+relationship ManyToMany{
+Product{discount} to Discount,
+}
+
+
+
+// Set pagination options
+paginate all with pagination
+
+// Use Data Transfer Objects (DTO)
+ dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+filter all
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
